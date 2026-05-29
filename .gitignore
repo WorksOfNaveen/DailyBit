@@ -92,13 +92,9 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 
-# Local/generated documentation (keep markdown if you want it tracked)
-/docs/_doc_render/
-/docs/_gen_codebase_doc.py
-/docs/*.docx
+# Local documentation (not published to the repo)
+/docs/
 
 # Editor local state (shared .vscode / .cursor rules & hooks stay tracked)
 .vscode/*.code-workspace
 .cursor/plans/
-
-/docs
