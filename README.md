@@ -61,6 +61,10 @@ Styles live **in the same file** as each screen or component, at the bottom:
 - Spacing and radius tokens come from [`src/styles/spacing.ts`](src/styles/spacing.ts).
 - No global stylesheet file and no inline style objects in JSX.
 
+## Download (Android)
+
+Latest APK: [DailyBit v1.2.0](https://github.com/WorksOfNaveen/DailyBit/releases/download/v1.2.0/DailyBit-v1.2.0.apk) — splash screen, inline delete, 7-day streak milestone.
+
 ## Getting started
 
 Requires [React Native environment setup](https://reactnative.dev/docs/set-up-your-environment) and Node.js `>= 22.11.0`.
