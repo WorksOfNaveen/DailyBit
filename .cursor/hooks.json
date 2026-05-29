@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "hooks": {
+    "beforeShellExecution": [
+      {
+        "command": "node .cursor/hooks/npm-install-guard.js",
+        "matcher": "npm (install|i |add |ci )|yarn (add |install )|pnpm (add |install )",
+        "failClosed": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+---
+description: CRITICAL SECURITY PROTOCOL. Apply this rule whenever the user asks to add, install, or update a frontend package/dependency (npm, yarn, pnpm).
+globs: package.json, package-lock.json, yarn.lock, pnpm-lock.yaml
+alwaysApply: true
+---
+
+# Dependency Security Protocol
+
+Frontend ecosystems are highly susceptible to registry poisoning and malicious lifecycle scripts.
+
+**Enforcement:** `.cursor/hooks/npm-install-guard.js` blocks shell installs without `--ignore-scripts` and requires user approval for all `npm`/`yarn`/`pnpm` install commands. You cannot bypass this by using the Shell tool.
+
+When asked to install a package for this project, you **MUST NOT** execute it immediately. Follow this strict protocol:
+
+## Step 1: Package Verification
+
+Query the registry using `npm view <package_name>` or `pnpm info <package_name>` to confirm the exact package name, version, and publisher provenance to prevent typosquatting.
+
+## Step 2: Prepare the Isolated Command
+
+You must enforce flags that block `preinstall` and `postinstall` hooks, as these are the primary vectors for supply chain attacks.
+
+- **npm:** `npm install <package_name> --ignore-scripts`
+- **pnpm:** `pnpm add <package_name> --ignore-scripts`
+- **yarn:** `yarn add <package_name> --ignore-scripts`
+
+## Step 3: Request Explicit Approval
+
+Pause execution. Present the registry data and the safe command to the user.
+
+**Format your response EXACTLY like this:**
+
+> 🛡️ **Security Check for `<package_name>`**
+>
+> **Registry Data:** [Briefly list author, weekly downloads, and any red flags]
+>
+> To protect your local environment, I will run:
+> `[Insert command with --ignore-scripts]`
+>
+> **Do you approve this installation? (Type 'yes' to proceed)**
+
+**NEVER** execute the installation command without explicit user approval.

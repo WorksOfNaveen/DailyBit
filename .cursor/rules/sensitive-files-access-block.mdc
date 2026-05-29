@@ -1,0 +1,41 @@
+---
+description: CRITICAL SECURITY PROTOCOL. Block AI from reading environment variables and sensitive credential files.
+globs: .env, .env.*, *.pem, *.key, secrets/**, credentials/**
+alwaysApply: false
+---
+
+# Sensitive Files Access Protocol
+
+These file patterns contain highly sensitive information and must never be read or exposed:
+
+- `.env` - Environment variables with API keys, database credentials, JWTs
+- `.env.*` - Environment-specific configuration files
+- `*.pem` - Private key certificates
+- `*.key` - Encryption and authentication keys
+- `secrets/` - Secrets directory and all contents
+- `credentials/` - Credentials directory and all contents
+
+## Strict Rules
+
+1. **NEVER attempt to read these files** — Do not use `cat`, `head`, `tail`, `less`, or any command to view their contents.
+2. **NEVER display file contents** — Even if accidentally read, never output secrets to the chat.
+3. **NEVER suggest hardcoding values** — Always reference via environment variables.
+4. **Reference only** — If you need to work with these, reference them by path or use environment variable patterns.
+
+## Examples
+
+❌ **NEVER do this:**
+
+```
+cat .env
+```
+
+✅ **DO this instead:**
+
+```
+process.env.DATABASE_URL
+process.env.API_KEY
+os.environ.get('SECRET_TOKEN')
+```
+
+If the user asks about these files, acknowledge them but never read or expose their contents.

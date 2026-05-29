@@ -40,6 +40,10 @@ local.properties
 node_modules/
 npm-debug.log
 yarn-error.log
+yarn-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.log
 
 # fastlane
 #
@@ -73,3 +77,26 @@ yarn-error.log
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# Environment & secrets (never commit real keys)
+.env
+.env.*
+!.env.example
+
+# TypeScript / tooling caches
+*.tsbuildinfo
+.eslintcache
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Local/generated documentation (keep markdown if you want it tracked)
+/docs/_doc_render/
+/docs/_gen_codebase_doc.py
+/docs/*.docx
+
+# Editor local state (shared .vscode / .cursor rules & hooks stay tracked)
+.vscode/*.code-workspace
+.cursor/plans/
