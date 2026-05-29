@@ -100,3 +100,5 @@ Desktop.ini
 # Editor local state (shared .vscode / .cursor rules & hooks stay tracked)
 .vscode/*.code-workspace
 .cursor/plans/
+
+/docs
