@@ -37,7 +37,7 @@ Example: Mon ✓, Tue ✓, Wed ✗, Thu ✓, Fri ✓ → streak **2** on Friday 
 
 ```
 src/
-├── components/       # Button, Card, CheckBox, EmptyState, ContributionMap, StreakCelebration
+├── components/       # Button, Card, CheckBox, EmptyState, ContributionMap, SplashScreen, StreakCelebration
 ├── context/          # HabitProvider — shared habit state
 ├── navigation/       # AppNavigator, navigation theme
 ├── screens/          # HabitList, AddHabit, HabitHistory
@@ -99,7 +99,3 @@ npm run ios
 
 - `@dailybit:habits` — list of habits
 - `@dailybit:completions` — per-day completion records (`habitId`, `date` as `YYYY-MM-DD`, `completed`)
-
-## Out of scope
-
-No backend, login, push notifications, or cloud sync.
