@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -17,15 +17,46 @@ import type { HabitListScreenProps } from '../navigation/types';
 import { radius, spacing } from '../styles/spacing';
 import { useTheme } from '../styles/useTheme';
 import { formatHeaderDate } from '../utils/dateHelpers';
+import { shouldCelebrateStreak } from '../utils/streakMilestones';
 import type { HabitWithTodayStatus } from '../types';
+
+type PendingCelebration = {
+  habitId: string;
+  habitName: string;
+  previousStreak: number;
+};
 
 type HabitListStyles = ReturnType<typeof useHabitListStyles>;
 
 export function HabitListScreen({ navigation }: HabitListScreenProps) {
   const { colors } = useTheme();
   const styles = useHabitListStyles();
-  const { habitsWithStatus, loading, refresh, toggleHabitToday } = useHabits();
+  const { habitsWithStatus, loading, refresh, deleteHabit, toggleHabitToday } =
+    useHabits();
   const [refreshing, setRefreshing] = React.useState(false);
+  const pendingCelebration = useRef<PendingCelebration | null>(null);
+
+  useEffect(() => {
+    const pending = pendingCelebration.current;
+    if (!pending) {
+      return;
+    }
+    const item = habitsWithStatus.find(
+      entry => entry.habit.id === pending.habitId,
+    );
+    if (!item) {
+      pendingCelebration.current = null;
+      return;
+    }
+    if (
+      shouldCelebrateStreak(pending.previousStreak, item.streak)
+    ) {
+      navigation.navigate('StreakMilestone', {
+        habitName: pending.habitName,
+      });
+    }
+    pendingCelebration.current = null;
+  }, [habitsWithStatus, navigation]);
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
@@ -35,9 +66,24 @@ export function HabitListScreen({ navigation }: HabitListScreenProps) {
 
   const handleToggle = useCallback(
     async (habitId: string) => {
+      const item = habitsWithStatus.find(entry => entry.habit.id === habitId);
+      if (item) {
+        pendingCelebration.current = {
+          habitId,
+          habitName: item.habit.name,
+          previousStreak: item.streak,
+        };
+      }
       await toggleHabitToday(habitId);
     },
-    [toggleHabitToday],
+    [habitsWithStatus, toggleHabitToday],
+  );
+
+  const handleDelete = useCallback(
+    async (habitId: string) => {
+      await deleteHabit(habitId);
+    },
+    [deleteHabit],
   );
 
   const renderItem = useCallback(
@@ -46,6 +92,7 @@ export function HabitListScreen({ navigation }: HabitListScreenProps) {
         item={item}
         styles={styles}
         onToggle={handleToggle}
+        onDelete={handleDelete}
         onOpenHistory={() =>
           navigation.navigate('HabitHistory', {
             habitId: item.habit.id,
@@ -54,7 +101,7 @@ export function HabitListScreen({ navigation }: HabitListScreenProps) {
         }
       />
     ),
-    [handleToggle, navigation, styles],
+    [handleDelete, handleToggle, navigation, styles],
   );
 
   return (
@@ -112,11 +159,13 @@ function HabitListItem({
   item,
   styles,
   onToggle,
+  onDelete,
   onOpenHistory,
 }: {
   item: HabitWithTodayStatus;
   styles: HabitListStyles;
   onToggle: (habitId: string) => void;
+  onDelete: (habitId: string) => void;
   onOpenHistory: () => void;
 }) {
   return (
@@ -138,6 +187,14 @@ function HabitListItem({
             {item.habit.name}
           </Text>
           <StreakBadge streak={item.streak} styles={styles} />
+        </Pressable>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={`Delete ${item.habit.name}`}
+          onPress={() => onDelete(item.habit.id)}
+          hitSlop={8}
+          style={styles.deleteButton}>
+          <Text style={styles.deleteText}>✕</Text>
         </Pressable>
       </View>
     </Card>
@@ -263,6 +320,14 @@ function useHabitListStyles() {
     badgeTextInactive: {
       fontSize: 13,
       color: colors.textSecondary,
+    },
+    deleteButton: {
+      padding: spacing.xs,
+    },
+    deleteText: {
+      fontSize: 18,
+      color: colors.textSecondary,
+      fontWeight: '500',
     },
       }),
     [colors, insets.top, insets.bottom],

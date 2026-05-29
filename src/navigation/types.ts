@@ -4,6 +4,7 @@ export type RootStackParamList = {
   HabitList: undefined;
   AddHabit: undefined;
   HabitHistory: { habitId: string; habitName: string };
+  StreakMilestone: { habitName: string };
 };
 
 export type HabitListScreenProps = StackScreenProps<
@@ -19,4 +20,9 @@ export type AddHabitScreenProps = StackScreenProps<
 export type HabitHistoryScreenProps = StackScreenProps<
   RootStackParamList,
   'HabitHistory'
+>;
+
+export type StreakMilestoneScreenProps = StackScreenProps<
+  RootStackParamList,
+  'StreakMilestone'
 >;

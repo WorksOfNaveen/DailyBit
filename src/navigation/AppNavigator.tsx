@@ -7,6 +7,7 @@ import { useTheme } from '../styles/useTheme';
 import { AddHabitScreen } from '../screens/AddHabitScreen';
 import { HabitHistoryScreen } from '../screens/HabitHistoryScreen';
 import { HabitListScreen } from '../screens/HabitListScreen';
+import { StreakMilestoneScreen } from '../screens/StreakMilestoneScreen';
 import { buildNavigationTheme } from './navigationTheme';
 import type { RootStackParamList } from './types';
 
@@ -40,6 +41,11 @@ export function AppNavigator() {
           name="HabitHistory"
           component={HabitHistoryScreen}
           options={({ route }) => ({ title: route.params.habitName })}
+        />
+        <Stack.Screen
+          name="StreakMilestone"
+          component={StreakMilestoneScreen}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>

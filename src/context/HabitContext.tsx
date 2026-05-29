@@ -8,13 +8,14 @@ import React, {
   type PropsWithChildren,
 } from 'react';
 import {
+  createHabitId,
+  deleteHabit as deleteHabitStorage,
   getCompletions,
   getHabits,
   getStreakForHabit,
   isCompletedOnDate,
   saveHabit,
   toggleCompletion as toggleCompletionStorage,
-  createHabitId,
 } from '../storage/habitStorage';
 import type { Habit, HabitCompletion, HabitWithTodayStatus } from '../types';
 import { formatDate } from '../utils/dateHelpers';
@@ -26,6 +27,7 @@ type HabitContextValue = {
   loading: boolean;
   refresh: () => Promise<void>;
   addHabit: (name: string) => Promise<void>;
+  deleteHabit: (habitId: string) => Promise<void>;
   toggleHabitToday: (habitId: string) => Promise<void>;
 };
 
@@ -77,6 +79,14 @@ export function HabitProvider({ children }: PropsWithChildren) {
     [refresh],
   );
 
+  const deleteHabit = useCallback(
+    async (habitId: string) => {
+      await deleteHabitStorage(habitId);
+      await refresh();
+    },
+    [refresh],
+  );
+
   const toggleHabitToday = useCallback(
     async (habitId: string) => {
       const updated = await toggleCompletionStorage(habitId, today);
@@ -93,6 +103,7 @@ export function HabitProvider({ children }: PropsWithChildren) {
       loading,
       refresh,
       addHabit,
+      deleteHabit,
       toggleHabitToday,
     }),
     [
@@ -102,6 +113,7 @@ export function HabitProvider({ children }: PropsWithChildren) {
       loading,
       refresh,
       addHabit,
+      deleteHabit,
       toggleHabitToday,
     ],
   );

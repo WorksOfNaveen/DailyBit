@@ -1,9 +1,11 @@
 import React from 'react';
-import { StatusBar } from 'react-native';
+import { LogBox, StatusBar } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { SplashScreen } from './src/components/SplashScreen';
 import { HabitProvider } from './src/context/HabitContext';
 import { AppNavigator } from './src/navigation/AppNavigator';
+
+LogBox.ignoreLogs(['InteractionManager has been deprecated']);
 
 function App() {
   const [showSplash, setShowSplash] = React.useState(true);

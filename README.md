@@ -4,10 +4,11 @@ A local-first habit tracker built with React Native. Track a small set of daily 
 
 ## Features
 
-- **Habit list** — Today’s habits with toggle, streak badge, and navigation to history
+- **Splash screen** — Short branded intro when the app opens
+- **Habit list** — Today’s habits with toggle, streak badge, inline delete, and navigation to history
 - **Add habit** — Simple name-only form (max 50 characters)
 - **History** — Last 7 days per habit: current streak, completion count, contribution map, and day-by-day list
-- **Streaks** — Consecutive completed days shown on the list screen; brief celebration when you hit a 7-day streak
+- **Streaks** — Consecutive completed days on the list; full-screen milestone with a motivational quote when you hit 7 days
 - **Light UI** — Static light appearance (not tied to system dark mode)
 - **Offline storage** — Habits and completions persist with AsyncStorage
 
@@ -21,7 +22,7 @@ A streak is the number of **consecutive completed days** ending on an anchor day
 
 Example: Mon ✓, Tue ✓, Wed ✗, Thu ✓, Fri ✓ → streak **2** on Friday (Thu + Fri only).
 
-**7-day milestone:** When you complete today and your streak goes from 6 to 7, a short banner appears on the habit list (auto-dismisses after 2 seconds). It only fires on that toggle, not on app open or refresh.
+**7-day milestone:** When you complete today and your streak goes from 6 to 7, the app navigates to a milestone screen with a quote. It only fires on that toggle, not on app open or refresh.
 
 ## Tech stack
 
@@ -40,7 +41,7 @@ src/
 ├── components/       # Button, Card, CheckBox, EmptyState, ContributionMap, SplashScreen, StreakCelebration
 ├── context/          # HabitProvider — shared habit state
 ├── navigation/       # AppNavigator, navigation theme
-├── screens/          # HabitList, AddHabit, HabitHistory
+├── screens/          # HabitList, AddHabit, HabitHistory, StreakMilestone
 ├── storage/          # AsyncStorage CRUD
 ├── styles/           # colors (light-only), spacing, useTheme
 ├── utils/            # dates, streaks, milestones, chart data
